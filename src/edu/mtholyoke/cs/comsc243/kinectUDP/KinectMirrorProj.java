@@ -1,17 +1,12 @@
 package edu.mtholyoke.cs.comsc243.kinectUDP;
-import java.lang.Math.*;
-import java.util.Arrays;
+
 import java.io.IOException;
 
 import processing.core.PApplet;
 import processing.core.PVector;
 
-/**
- * @author eitan
- *
- */
-public class KinectRenderDemo extends PApplet {
-
+public class KinectMirrorProj extends PApplet {
+	
 	KinectBodyDataProvider kinectReader;
 
 	public void settings() {
@@ -218,11 +213,11 @@ public class KinectRenderDemo extends PApplet {
 
 	}
 
-
-
-
+	
+	
 
 	public static void main(String[] args) {
+		// TODO Auto-generated method stub
 		PApplet.main(KinectRenderDemo.class.getName());
 	}
 
