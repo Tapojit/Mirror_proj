@@ -1,5 +1,6 @@
 package edu.mtholyoke.cs.comsc243.kinectUDP;
 
+import java.awt.Color;
 import java.io.IOException;
 
 import processing.core.PApplet;
@@ -15,9 +16,13 @@ public class KinectMirrorProj extends PApplet {
 	
 	
 	float theta = (float) 0.0;  // Start angle at 0
-	int colSwatch=0;
+	
 	int spiralCount=1;
 	boolean neg=false;
+	int from = color(60,59,63);
+	int to = color(96,92,60);
+	int fromHel=color(252,74,26);
+	int toHel=color(247,183,51);
 	public void setup(){
 
 		/*
@@ -48,7 +53,7 @@ public class KinectMirrorProj extends PApplet {
 
 
 
-		background(200,200,200);
+		background(255);
 
 		// leave trails instead of clearing background \ 
 		//noStroke();
@@ -97,7 +102,8 @@ public class KinectMirrorProj extends PApplet {
 //
 //
 //			}
-	
+			
+			
 			plotSine(handLeft,shoulderLeft,false);
 			plotSine(handLeft,shoulderLeft,true);
 			plotSine(shoulderLeft,shoulderRight,false);
@@ -138,8 +144,10 @@ public class KinectMirrorProj extends PApplet {
 		
 		translate(head.x,head.y);
 		for(int i=0;i<spiralCount;i++){
+			int interm=lerpColor(from,to,(float)(0.004*(i+1)));
 			rotate((float) 0.1);
-			fill(i,i+50,i+45);
+			fill(interm);;
+			
 			noStroke();
 			ellipse((float)(i*0.001),(float)0,(float)0.02,(float)0.02);
 		}
@@ -156,11 +164,6 @@ public class KinectMirrorProj extends PApplet {
 	}
 
 	public void plotSine(PVector vec1, PVector vec2,boolean inv){
-		if(colSwatch==255){
-			System.out.println("yes");
-			colSwatch=0;
-		}
-		colSwatch+=0.5;
 		theta+=0.02;
 		float[] yS=new float[16];
 		if(vec1!=null && vec2!=null){
@@ -181,14 +184,16 @@ public class KinectMirrorProj extends PApplet {
 			float x=theta;
 			
 			for(int i=0;i<yS.length;i++){
+				int interm=lerpColor(fromHel,toHel,(float)0.05*(i+1));
 				yS[i]=(sin(x)/100)*5;
 				if(inv){
 					yS[i]=-yS[i];
+					interm=lerpColor(toHel,fromHel,(float)0.05*(i+1));
 				}
 				
 				x+=dx;
 				noStroke();
-				fill((int)(colSwatch+(i*0.5)));
+				fill(interm);
 				pushMatrix();
 				translate(vec1.x,vec1.y);
 				rotate(rotateAngle);
@@ -218,7 +223,7 @@ public class KinectMirrorProj extends PApplet {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		PApplet.main(KinectRenderDemo.class.getName());
+		PApplet.main(KinectMirrorProj.class.getName());
 	}
 
 }
