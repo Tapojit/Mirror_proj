@@ -11,12 +11,13 @@ public class KinectMirrorProj extends PApplet {
 	KinectBodyDataProvider kinectReader;
 
 	public void settings() {
-		size(600,600);//, P2D);
+//		size(600,600);//, P2D);
+		fullScreen();
 	}
 	
-	
+//	Just some constants	
 	float theta = (float) 0.0;  // Start angle at 0
-	
+
 	int spiralCount=1;
 	boolean neg=false;
 	int from = color(60,59,63);
@@ -25,15 +26,7 @@ public class KinectMirrorProj extends PApplet {
 	int toHel=color(247,183,51);
 	public void setup(){
 
-		/*
-		 * use this code to run your PApplet from data recorded by UPDRecorder 
-		 *
-		try {
-			kinectReader = new KinectBodyDataProvider("recordedData.kinect", 5);
-		} catch (IOException e) {
-			System.out.println("Unable to creat e kinect producer");
-		}
-		 */
+
 		try {
 			kinectReader = new KinectBodyDataProvider("test.kinect", 5);
 		} catch (IOException e) {
@@ -74,35 +67,8 @@ public class KinectMirrorProj extends PApplet {
 			PVector handRight = person.getJoint(Body.HAND_RIGHT);
 
 
-//			fill(255,255,255);
-//			noStroke();
-//			drawIfValid(head);
-//			drawIfValid(spine);
-//			drawIfValid(spineBase);
-//			drawIfValid(shoulderLeft);
-//			drawIfValid(shoulderRight);
-//			drawIfValid(footLeft);
-//			drawIfValid(footRight);
-//			drawIfValid(handLeft);
-//			drawIfValid(handRight);
-
-//			if( (shoulderLeft != null) &&
-//					(shoulderRight != null) &&
-//					(handLeft != null) &&
-//					(handRight != null) ) {
-//				stroke(255,0,0, 100);
-//				noFill();
-//				strokeWeight(.05f); // because of scale weight needs to be much thinner
-//				curve(
-//						handLeft.x, handLeft.y, 
-//						shoulderLeft.x, shoulderLeft.y, 
-//						shoulderRight.x, shoulderRight.y,
-//						handRight.x, handRight.y
-//						);
-//
-//
-//			}
-			
+			//Plots sine curves for limbs, torso
+			//Also plots spiral head
 			
 			plotSine(handLeft,shoulderLeft,false);
 			plotSine(handLeft,shoulderLeft,true);
@@ -121,12 +87,8 @@ public class KinectMirrorProj extends PApplet {
 		}
 	}
 
-	/**
-	 * Draws an ellipse in the x,y position of the vector (it ignores z).
-	 * Will do nothing is vec is null.  This is handy because get joint 
-	 * will return null if the joint isn't tracked. 
-	 * @param vec
-	 */
+	//Function for plotting spiral head
+	
 	public void spiralHead(PVector head){
 		if(spiralCount==200){
 			neg=true;
@@ -152,7 +114,8 @@ public class KinectMirrorProj extends PApplet {
 			ellipse((float)(i*0.001),(float)0,(float)0.02,(float)0.02);
 		}
 	}
-
+	
+	//Calculates gradient between two given PVectors
 	public float gradient(PVector vec1, PVector vec2){
 		float grad=0;
 		if(vec1!=null&&vec2!=null){
@@ -162,7 +125,9 @@ public class KinectMirrorProj extends PApplet {
 		return grad;
 
 	}
-
+	
+	
+	//Plots sine curves between two given PVectors
 	public void plotSine(PVector vec1, PVector vec2,boolean inv){
 		theta+=0.02;
 		float[] yS=new float[16];
@@ -172,10 +137,7 @@ public class KinectMirrorProj extends PApplet {
 			if(vec1.x>vec2.x && gradient(vec1,vec2)<0){
 				rotateAngle=PI-abs(rotateAngle);
 			}
-//			System.out.println(gradient(vec1,vec2));
-//			System.out.println("RA"+rotateAngle);
-//			System.out.println("x1 "+vec1.x+"x2 "+vec2.x+"sub "+(vec1.x-vec2.x));
-//			System.out.println("y1 "+vec1.y+"y2 "+vec2.y+"sub "+(vec1.y-vec2.y));
+
 			if (vec1.x==vec2.x && vec1.y>vec2.y){
 				rotateAngle=PI/2;
 			}
@@ -205,12 +167,15 @@ public class KinectMirrorProj extends PApplet {
 		
 		
 	}
+	
+	//Calculates midpoint PVector between two given PVectors
 	public PVector midPt(PVector vec1, PVector vec2){
 		float X=(vec1.x+vec2.x)/2;
 		float Y=(vec1.y+vec2.y)/2;
 		return new PVector(X,Y); 
 		
 	}
+	
 	public void drawIfValid(PVector vec) {
 		if(vec != null) {
 			ellipse(vec.x, vec.y, .1f,.1f);
